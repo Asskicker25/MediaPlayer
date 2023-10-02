@@ -55,5 +55,24 @@
     <None Include="extern\fmod\include\fmod.cs" />
     <None Include="extern\fmod\include\fmod_dsp.cs" />
     <None Include="extern\fmod\include\fmod_errors.cs" />
+    <None Include="Assets\Audio\stereo.ogg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Assets\Audio\drumloop.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Assets\Audio\jaguar.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Assets\Audio\singing.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Assets\Audio\standrews.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Assets\Audio\swish.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Assets\Audio\wave.mp3" />
   </ItemGroup>
 </Project>

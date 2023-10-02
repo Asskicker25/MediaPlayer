@@ -152,9 +152,18 @@
     <ClInclude Include="src\AudioManger.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Audio\stereo.ogg" />
     <None Include="extern\fmod\include\fmod.cs" />
     <None Include="extern\fmod\include\fmod_dsp.cs" />
     <None Include="extern\fmod\include\fmod_errors.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Assets\Audio\drumloop.wav" />
+    <Media Include="Assets\Audio\jaguar.wav" />
+    <Media Include="Assets\Audio\singing.wav" />
+    <Media Include="Assets\Audio\standrews.wav" />
+    <Media Include="Assets\Audio\swish.wav" />
+    <Media Include="Assets\Audio\wave.mp3" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
