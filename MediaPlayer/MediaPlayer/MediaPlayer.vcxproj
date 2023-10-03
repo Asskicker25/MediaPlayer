@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\MediaPlayer.cpp" />
     <ClCompile Include="src\AudioManger.cpp" />
     <ClCompile Include="src\maincpp.cpp" />
   </ItemGroup>
@@ -149,7 +150,10 @@
     <ClInclude Include="extern\fmod\include\fmod_dsp_effects.h" />
     <ClInclude Include="extern\fmod\include\fmod_errors.h" />
     <ClInclude Include="extern\fmod\include\fmod_output.h" />
+    <ClInclude Include="src\MediaPlayer.h" />
     <ClInclude Include="src\AudioManger.h" />
+    <ClInclude Include="src\Channel.h" />
+    <ClInclude Include="src\Sound.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Audio\stereo.ogg" />

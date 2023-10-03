@@ -7,7 +7,7 @@
 #define FMODCALL(x,message,y) if(x != FMOD_OK)\
 							{\
 							y();\
-							std::cout<<"Errror with "<<message<< " at " << __FILE__ << " " <<  __LINE__ <<std::endl;\
+							std::cout<<"Errror with "<<message <<" " << x << " at " << __FILE__ << " " <<  __LINE__ <<std::endl;\
 							}
 
 
@@ -40,18 +40,46 @@ void AudioManger::Initialize()
 
 void AudioManger::Update()
 {
+	UpdateChannelState();
+
 	FMODCALL(system->update(), "System Update", [this]()
-	{
+		{
 			Destroy();
-	});
+		});
+}
+
+void AudioManger::UpdateChannelState()
+{
+	for (int i = 0; i < channels.size(); i++)
+	{
+		bool isPlaying = false;
+
+		if (!channels[i]->isInUse) continue;
+
+		[&]()
+		{
+			FMODCALL(channels[i]->channel->isPlaying(&isPlaying), "Channel Playing", [&]()
+			{
+					FMODCALL(loadedSounds[channels[i]->soundID]->release(), "Sound Releasing", NULL);
+					channels[i]->isInUse = false;
+			});
+		}();
+
+		if (!isPlaying)
+		{
+			FMODCALL(loadedSounds[channels[i]->soundID]->release(), "Sound Releasing", NULL);
+			channels[i]->isInUse = false;
+		}
+	}
 }
 
 void AudioManger::Destroy()
 {
+
 	std::unordered_map<std::string, FMOD::Sound*>::iterator it;
 	for (it = loadedSounds.begin(); it != loadedSounds.end(); ++it)
 	{
-		FMODCALL(it->second->release(),"Sound Release", NULL);
+		FMODCALL(it->second->release(), "Sound Release", NULL);
 	}
 
 	FMODCALL(system->close(), "System Close", NULL);
@@ -83,7 +111,7 @@ Channel* AudioManger::GetUnusedChannel()
 	return nullptr;
 }
 
-void AudioManger::PlaySound(std::string soundId)
+void AudioManger::PlaySound(Sound& sound)
 {
 	Channel* channelToUse = GetUnusedChannel();
 
@@ -93,42 +121,45 @@ void AudioManger::PlaySound(std::string soundId)
 		channels.push_back(channelToUse);
 		channelToUse->isInUse = true;
 	}
-	
-	channelToUse->soundId = soundId;
+
+	channelToUse->soundID = sound.soundID;
 
 	[&]()
 		{
-			FMODCALL(system->playSound(loadedSounds[soundId], 0, false, &channelToUse->channel), "Play Sound" + soundId, [&]()
-			{
-					FMODCALL(loadedSounds[soundId]->release(),"LoadedSound Release", NULL);
+			FMODCALL(system->playSound(loadedSounds[sound.soundID], 0, false, &channelToUse->channel), "Play Sound" + sound.soundID, [&]()
+				{
+					FMODCALL(loadedSounds[sound.soundID]->release(), "LoadedSound Release", NULL);
 					FMODCALL(system->close(), "System Close", NULL);
 					FMODCALL(system->release(), "System Release", NULL);
-			});
+				});
 		}();
+
+		sound.channel = channelToUse;
 
 }
 
 
-
-void AudioManger::LoadSound(const char* path, std::string soundID, bool isStreaming)
+void AudioManger::LoadSound(Sound& sound)
 {
-	FMOD::Sound* sound;
+	FMOD::Sound* soundPtr;
 	bool soundLoaded = true;
 
 	[&]() {
-		FMODCALL(system->createSound(path, isStreaming ? FMOD_CREATESTREAM : FMOD_DEFAULT, NULL, &sound),
-			"Loading Sound " + soundID, [&]()
+		FMODCALL(system->createSound(sound.path,
+			(sound.isStreaming ? FMOD_CREATESTREAM : FMOD_DEFAULT) |
+			(sound.isLooping ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF),
+			NULL, &soundPtr),
+			"Loading Sound " + sound.soundID, [&]()
 			{
-				FMODCALL(sound->release(), "Sound Release", NULL);
+				FMODCALL(soundPtr->release(), "Sound Release", NULL);
 				FMODCALL(system->close(), "System Close", NULL);
 				FMODCALL(system->release(), "System Release", NULL);
 				soundLoaded = false;
 			});
 		}();
+		if (!soundLoaded) return;
 
-	if (!soundLoaded) return;
-
-	loadedSounds[soundID] = sound;
+		loadedSounds[sound.soundID] = soundPtr;
 }
 
 

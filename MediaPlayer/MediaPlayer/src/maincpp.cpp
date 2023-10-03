@@ -1,35 +1,58 @@
 #include "AudioManger.h"
+#include "MediaPlayer.h"
 #include <iostream>
 #include <fstream>
 #include <conio.h>
 
-void PlaySound(const char* soundfile, std::string soundID, AudioManger& audioManager)
-{
-	audioManager.LoadSound(soundfile, soundID);
-	audioManager.PlaySound(soundID);
+bool isAudioManagerInitialized = true;
 
-	printf("Sound playing, press ESC to quit . . .");
-	while (true)
+int main(int argc, char** agv)
+{
+	AudioManger audioManager;
+	MediaPlayer mediaPlayer(audioManager);
+
+	Sound jaguar;
+	jaguar.path = "Assets/Audio/jaguar.wav";
+	jaguar.soundID = "Jaguar";
+	//jaguar.isLooping = true;
+
+	Sound singing;
+	singing.path = "Assets/Audio/singing.wav";
+	singing.soundID = "Singing";
+	
+	Sound sneha;
+	sneha.path = "Assets/Audio/sneha.wav";
+	sneha.soundID = "Sneha";
+
+	audioManager.LoadSound(sneha);
+	audioManager.PlaySound(sneha);
+
+	mediaPlayer.SetSound(sneha);
+
+	while (isAudioManagerInitialized)
 	{
 		audioManager.Update();
 
 		if (_kbhit())
 		{
 			int key = _getch();
-			if (key == 27/*ESCAPE*/)
+			switch (key)
 			{
+			case 27: //Escape
+				isAudioManagerInitialized = false;
+				break;
+
+			case 32: //Space
+				mediaPlayer.PauseAudio();
+				break;
+
+			case 97:
+				mediaPlayer.PlayAudio();
 				break;
 			}
+
 		}
 	}
-}
-
-int main(int argc, char** agv)
-{
-	AudioManger audioManager;
-
-	PlaySound("Assets/Audio/jaguar.wav", "Jaguar", audioManager);
-
 
 	return 0;
 }

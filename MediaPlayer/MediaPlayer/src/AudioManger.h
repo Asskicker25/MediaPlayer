@@ -3,13 +3,9 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include "Channel.h"
+#include "Sound.h"
 
-struct Channel
-{
-	bool isInUse;
-	std::string soundId;
-	FMOD::Channel* channel;
-};
 
 class AudioManger
 {
@@ -32,8 +28,9 @@ public:
 
 	void Initialize();
 	void CreateSoundGroup(std::string name, bool setAsCurrent = false);
-	void LoadSound(const char* path, std::string soundID, bool isStreaming = false);
-	void PlaySound(std::string soundId);
+	void LoadSound(Sound& sound);
+	void PlaySound(Sound& sound);
+	void UpdateChannelState();
 
 	void Update();
 	void Destroy();
