@@ -16,11 +16,15 @@ MediaPlayer::~MediaPlayer()
 void MediaPlayer::SetSound(Sound soundObj)
 {
 	sound = soundObj;
+
+	AdjustVolume(sound.volume);
+	AdjustPitch(sound.pitch);
+	AdjustPan(sound.pan);
 }
 
 void MediaPlayer::PlayAudio()
 {
-	if (sound.channel == nullptr) return;
+	if (sound.channel == nullptr || !sound.channel->isInUse) return;
 
 	audioManager.PlayAudio(sound.channel->channel);
 	isPaused = false;
@@ -28,7 +32,7 @@ void MediaPlayer::PlayAudio()
 
 void MediaPlayer::PauseAudio()
 {
-	if (sound.channel == nullptr) return;
+	if (sound.channel == nullptr || !sound.channel->isInUse) return;
 
 	audioManager.PauseAudio(sound.channel->channel);
 	isPaused = true;
@@ -36,7 +40,7 @@ void MediaPlayer::PauseAudio()
 
 void MediaPlayer::TogglePauseAudio()
 {
-	if (sound.channel == nullptr) return;
+	if (sound.channel == nullptr || !sound.channel->isInUse) return;
 
 	if (isPaused)
 	{
@@ -50,7 +54,7 @@ void MediaPlayer::TogglePauseAudio()
 
 void MediaPlayer::StopAudio()
 {
-	if (sound.channel == nullptr) return;
+	if (sound.channel == nullptr || !sound.channel->isInUse) return;
 
 	audioManager.StopAudio(sound.channel->channel);
 
@@ -62,23 +66,23 @@ void MediaPlayer::StopAudio()
 
 void MediaPlayer::AdjustPitch(float pitchValue)
 {
-	if (sound.channel == nullptr) return;
+	if (sound.channel == nullptr || !sound.channel->isInUse) return;
 
 	audioManager.AdjustPitch(sound.channel->channel, pitchValue);
 }
 
 void MediaPlayer::AdjustVolume(float volumeValue)
 {
-	if (sound.channel == nullptr) return;
+	if (sound.channel == nullptr || !sound.channel->isInUse) return;
 
-	audioManager.AdjustPitch(sound.channel->channel, volumeValue);
+	audioManager.AdjustVolume(sound.channel->channel, volumeValue);
 }
 
 void MediaPlayer::AdjustPan(float panValue)
 {
-	if (sound.channel == nullptr) return;
+	if (sound.channel == nullptr || !sound.channel->isInUse) return;
 
-	audioManager.AdjustPitch(sound.channel->channel, panValue);
+	audioManager.AdjustPan(sound.channel->channel, panValue);
 }
 
 

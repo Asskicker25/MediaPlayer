@@ -78,7 +78,7 @@ void AudioManger::PlayAudio(FMOD::Channel* channel)
 {
 	FMODCALL(channel->setPaused(false), "Play Audio", [channel]()
 		{
-			channel->stop();
+			FMODCALL(channel->stop(),"Channel Stop",NULL);
 		});
 }
 
@@ -86,7 +86,7 @@ void AudioManger::PauseAudio(FMOD::Channel* channel)
 {
 	FMODCALL(channel->setPaused(true), "Pause Audio", [channel]()
 		{
-			channel->stop();
+			FMODCALL(channel->stop(), "Channel Stop", NULL);
 		});
 
 }
@@ -95,20 +95,32 @@ void AudioManger::StopAudio(FMOD::Channel* channel)
 {
 	FMODCALL(channel->stop(), "Stop Audio", [channel]()
 		{
-			channel->stop();
+			FMODCALL(channel->stop(), "Channel Stop", NULL);
 		});
 }
 
 void AudioManger::AdjustPitch(FMOD::Channel* channel, float pitchValue)
 {
+	FMODCALL(channel->setPitch(pitchValue), "Setting Pitch", [channel]()
+		{
+			FMODCALL(channel->stop(), "Channel Stop", NULL);
+		});
 }
 
 void AudioManger::AdjustVolume(FMOD::Channel* channel, float volumeValue)
 {
+	FMODCALL(channel->setVolume(volumeValue), "Setting Volume", [channel]()
+		{
+			FMODCALL(channel->stop(), "Channel Stop", NULL);
+		});
 }
 
 void AudioManger::AdjustPan(FMOD::Channel* channel, float panValue)
 {
+	FMODCALL(channel->setPan(panValue), "Setting Pan", [channel]()
+		{
+			FMODCALL(channel->stop(), "Channel Stop", NULL);
+		});
 }
 
 
