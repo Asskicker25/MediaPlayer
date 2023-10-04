@@ -21,6 +21,12 @@
     <ClCompile Include="src\AudioManger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\MediaPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AudioManger.h">
@@ -48,6 +54,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="extern\fmod\include\fmod_output.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MediaPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Channel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

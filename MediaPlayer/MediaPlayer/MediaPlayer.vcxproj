@@ -140,6 +140,7 @@
     <ClCompile Include="src\MediaPlayer.cpp" />
     <ClCompile Include="src\AudioManger.cpp" />
     <ClCompile Include="src\maincpp.cpp" />
+    <ClCompile Include="src\Sound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="extern\fmod\include\fmod.h" />

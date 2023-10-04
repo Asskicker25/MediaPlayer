@@ -10,6 +10,7 @@ private:
 
 	AudioManger& audioManager;
 	Sound sound;
+	bool isPaused = false;
 
 public:
 	MediaPlayer(AudioManger& audioManager);
@@ -17,8 +18,13 @@ public:
 
 	void SetSound(Sound sound);
 	void PlayAudio();
-	void StopAudio();
 	void PauseAudio();
+	void TogglePauseAudio();
+	void StopAudio();
+	void AdjustPitch(float pitchValue);
+	void AdjustVolume(float volumeValue);
+	void AdjustPan(float panValue);
+
 
 };
 

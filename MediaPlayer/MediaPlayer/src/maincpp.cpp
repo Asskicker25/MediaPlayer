@@ -43,11 +43,14 @@ int main(int argc, char** agv)
 				break;
 
 			case 32: //Space
-				mediaPlayer.PauseAudio();
+				mediaPlayer.TogglePauseAudio();
 				break;
 
-			case 97:
+			case 97: //a
 				mediaPlayer.PlayAudio();
+				break;
+			case 115: //s
+				mediaPlayer.StopAudio();
 				break;
 			}
 

@@ -32,6 +32,13 @@ public:
 	void PlaySound(Sound& sound);
 	void UpdateChannelState();
 
+	void PlayAudio(FMOD::Channel* channel);
+	void PauseAudio(FMOD::Channel* channel);
+	void StopAudio(FMOD::Channel* channel);
+	void AdjustPitch(FMOD::Channel* channel, float pitchValue);
+	void AdjustVolume(FMOD::Channel* channel, float volumeValue);
+	void AdjustPan(FMOD::Channel* channel, float panValue);
+
 	void Update();
 	void Destroy();
 };

@@ -1,5 +1,6 @@
-#include "AudioManger.h"
 #include <iostream>
+
+#include "AudioManger.h"
 
 // X is the FMOD_Result which checks for error
 // message is the string that addresses which function call is this.
@@ -72,6 +73,45 @@ void AudioManger::UpdateChannelState()
 		}
 	}
 }
+
+void AudioManger::PlayAudio(FMOD::Channel* channel)
+{
+	FMODCALL(channel->setPaused(false), "Play Audio", [channel]()
+		{
+			channel->stop();
+		});
+}
+
+void AudioManger::PauseAudio(FMOD::Channel* channel)
+{
+	FMODCALL(channel->setPaused(true), "Pause Audio", [channel]()
+		{
+			channel->stop();
+		});
+
+}
+
+void AudioManger::StopAudio(FMOD::Channel* channel)
+{
+	FMODCALL(channel->stop(), "Stop Audio", [channel]()
+		{
+			channel->stop();
+		});
+}
+
+void AudioManger::AdjustPitch(FMOD::Channel* channel, float pitchValue)
+{
+}
+
+void AudioManger::AdjustVolume(FMOD::Channel* channel, float volumeValue)
+{
+}
+
+void AudioManger::AdjustPan(FMOD::Channel* channel, float panValue)
+{
+}
+
+
 
 void AudioManger::Destroy()
 {

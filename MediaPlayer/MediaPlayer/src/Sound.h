@@ -10,4 +10,6 @@ struct Sound
 	bool isStreaming = false;
 	bool isLooping = false;
 	Channel* channel = nullptr;
+
+	void Reset();
 };
