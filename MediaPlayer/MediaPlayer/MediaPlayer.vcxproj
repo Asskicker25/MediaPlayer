@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)MediaPlayer\extern\fmod\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)MediaPlayer\extern\fmod\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)MediaPlayer\extern\imgui;$(SolutionDir)MediaPlayer\extern\glfw\include;$(SolutionDir)MediaPlayer\extern\fmod\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)MediaPlayer\extern\glfw\lib\$(Configuration)_x64;$(SolutionDir)MediaPlayer\extern\fmod\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)MediaPlayer\extern\fmod\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)MediaPlayer\extern\fmod\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)MediaPlayer\extern\imgui;$(SolutionDir)MediaPlayer\extern\glfw\include;$(SolutionDir)MediaPlayer\extern\fmod\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)MediaPlayer\extern\glfw\lib\$(Configuration)_x64;$(SolutionDir)MediaPlayer\extern\fmod\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -116,7 +116,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fmod_vc.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -133,10 +133,18 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fmod_vc.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="extern\imgui\imgui.cpp" />
+    <ClCompile Include="extern\imgui\imgui_demo.cpp" />
+    <ClCompile Include="extern\imgui\imgui_draw.cpp" />
+    <ClCompile Include="extern\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="extern\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="extern\imgui\imgui_tables.cpp" />
+    <ClCompile Include="extern\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\MediaPlayer.cpp" />
     <ClCompile Include="src\AudioManger.cpp" />
     <ClCompile Include="src\maincpp.cpp" />
@@ -151,6 +159,15 @@
     <ClInclude Include="extern\fmod\include\fmod_dsp_effects.h" />
     <ClInclude Include="extern\fmod\include\fmod_errors.h" />
     <ClInclude Include="extern\fmod\include\fmod_output.h" />
+    <ClInclude Include="extern\imgui\imconfig.h" />
+    <ClInclude Include="extern\imgui\imgui.h" />
+    <ClInclude Include="extern\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="extern\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="extern\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="extern\imgui\imgui_internal.h" />
+    <ClInclude Include="extern\imgui\imstb_rectpack.h" />
+    <ClInclude Include="extern\imgui\imstb_textedit.h" />
+    <ClInclude Include="extern\imgui\imstb_truetype.h" />
     <ClInclude Include="src\MediaPlayer.h" />
     <ClInclude Include="src\AudioManger.h" />
     <ClInclude Include="src\Channel.h" />
