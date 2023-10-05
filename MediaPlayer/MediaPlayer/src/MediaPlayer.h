@@ -25,6 +25,8 @@ public:
 	void AdjustVolume(float volumeValue);
 	void AdjustPan(float panValue);
 
+	bool IsPaused();
+
 
 };
 

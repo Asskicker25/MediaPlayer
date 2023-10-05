@@ -10,8 +10,14 @@
 #include "MediaPlayer.h"
 
 
-void DrawImguiWindow(bool window, ImVec4 clearColor, ImGuiIO io);
-void HandleUserInput(MediaPlayer& mediaPlayer);
+void DrawImguiWindow(bool window, ImVec4 clearColor, ImGuiIO io, int windowWidth, int windowHeight, Sound& sound);
+void GetKeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+AudioManger audioManager;
+MediaPlayer mediaPlayer(audioManager);
+
+int screenWidth{ 800 };
+int screenHeight{ 600 };
 
 int main(void)
 {
@@ -26,12 +32,14 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Media Player", NULL, NULL);
+    window = glfwCreateWindow(screenWidth, screenHeight, "Media Player", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
         return -1;
     }
+
+    glfwSetKeyCallback(window, GetKeyboardCallback);
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
@@ -56,9 +64,6 @@ int main(void)
     // Our state
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-    AudioManger audioManager;
-    MediaPlayer mediaPlayer(audioManager);
 
     Sound jaguar;
     jaguar.path = "Assets/Audio/jaguar.wav";
@@ -92,27 +97,29 @@ int main(void)
     {
 
         /* Poll for and process events */
-
         glfwPollEvents();
 
         audioManager.Update();
 
-        HandleUserInput(mediaPlayer);
-        
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        DrawImguiWindow(show_another_window, clear_color,io);
+        glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
+        glViewport(0, 0, screenWidth, screenHeight);
+
+        int imguiWindowWidth = screenWidth / 2;
+        int imguiWindowHeight = screenHeight / 2;
+
+        DrawImguiWindow(show_another_window, clear_color,io, imguiWindowWidth, imguiWindowHeight, sneha);
 
         /* Render here */
         ImGui::Render();
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
+
         glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
+
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         /* Swap front and back buffers */
@@ -130,48 +137,71 @@ int main(void)
     return 0;
 }
 
-void DrawImguiWindow(bool window, ImVec4 clearColor, ImGuiIO io)
+void DrawImguiWindow(bool window, ImVec4 clearColor, ImGuiIO io, int windowWidth, int windowHeight, Sound& sound)
 {
-    static float f = 0.0f;
-    static int counter = 0;
+    int spacingUnit = windowWidth * 0.005f;
 
-    ImGui::SetNextWindowPos(ImVec2(0, 0));
-    ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+    ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight));
+    ImGui::SetNextWindowPos(ImVec2((screenWidth/2) - windowWidth/2, (screenHeight/2) - windowHeight/2));
 
-    ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-    //ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-    ImGui::Checkbox("Another Window", &window);
+    //ImGui::SetNextWindowSize(ImVec2(800, 600));
 
-    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-    ImGui::ColorEdit3("clear color", (float*)&clearColor); // Edit 3 floats representing a color
+    ImGui::Begin("Media Controls");                          // Create a window called "Hello, world!" and append into it.
 
-    if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-        counter++;
+    ImGui::SetWindowFontScale(windowWidth * 0.0025f);
+
+    ImGui::Text("Playing : %s" , sound.soundID.c_str());   
+    
+
+    if (ImGui::Button(mediaPlayer.IsPaused()? "Play" : "Pause"))
+    {
+        mediaPlayer.TogglePauseAudio();
+    }
+
     ImGui::SameLine();
-    ImGui::Text("counter = %d", counter);
+    ImGui::Spacing();
+    ImGui::SameLine();
+    ImGui::Dummy(ImVec2(spacingUnit * 3, 0));
+
+    ImGui::SameLine();
+    if (ImGui::Button("Stop"))
+    {
+        mediaPlayer.TogglePauseAudio();
+    }
+
+    ImGui::Spacing();
+    ImGui::Dummy(ImVec2(0.0f, spacingUnit * 5));
+
+
+    if (ImGui::SliderFloat("Volume", &sound.volume, 0.0f, 1.0f))
+    {
+        mediaPlayer.AdjustVolume(sound.volume);
+    }
+
+    if (ImGui::SliderFloat("Pitch", &sound.pitch, 0.0f, 2.0f))
+    {
+        mediaPlayer.AdjustPitch(sound.pitch);
+    }
+
+    if (ImGui::SliderFloat("Pan", &sound.pan, -1.0f, 1.0f))
+    {
+        mediaPlayer.AdjustPan(sound.pan);
+    }
+
 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
     ImGui::End();
 }
 
-void HandleUserInput(MediaPlayer& mediaPlayer)
+void GetKeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (_kbhit())
+    if (action == GLFW_PRESS)
     {
-        int key = _getch();
-        switch (key)
+        if (key == GLFW_KEY_SPACE)
         {
-        case 32: //Space
             mediaPlayer.TogglePauseAudio();
-            break;
-
-        case 97: //a
-            mediaPlayer.PlayAudio();
-            break;
-        case 115: //s
-            mediaPlayer.StopAudio();
-            break;
+            //mediaPlayer.AdjustPitch(1.0f);
         }
-
     }
 }
+

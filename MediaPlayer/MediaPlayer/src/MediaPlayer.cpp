@@ -85,6 +85,11 @@ void MediaPlayer::AdjustPan(float panValue)
 	audioManager.AdjustPan(sound.channel->channel, panValue);
 }
 
+bool MediaPlayer::IsPaused()
+{
+	return isPaused;
+}
+
 
 
 
