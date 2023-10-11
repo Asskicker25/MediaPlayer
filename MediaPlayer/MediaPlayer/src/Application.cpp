@@ -14,6 +14,8 @@
 void DrawImguiWindow(bool window, ImVec4 clearColor, ImGuiIO io, int windowWidth, int windowHeight);
 void GetKeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
+void DeleteSounds();
+
 AudioManger audioManager;
 MediaPlayer mediaPlayer(audioManager);
 
@@ -138,6 +140,7 @@ int main(void)
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 
+	DeleteSounds();
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	return 0;
@@ -267,5 +270,16 @@ void GetKeyboardCallback(GLFWwindow* window, int key, int scancode, int action, 
 			//mediaPlayer.AdjustPitch(1.0f);
 		}
 	}
+}
+
+void DeleteSounds()
+{
+	/*std::map<std::string, Sound*>::iterator it;
+
+	for (it = sounds.begin(); it != sounds.end(); ++it)
+	{
+		delete it->second;
+	}*/
+	//audioManager.Destroy();
 }
 

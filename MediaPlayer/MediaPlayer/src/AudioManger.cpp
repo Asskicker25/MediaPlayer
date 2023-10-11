@@ -32,6 +32,14 @@ AudioManger::~AudioManger()
 		FMODCALL(soundGroups[i]->release(), "SoundGroupRelease " + i, NULL);
 	}
 
+	std::unordered_map<std::string, Sound*>::iterator it;
+
+	for (it = loadedSounds.begin(); it != loadedSounds.end(); ++it)
+	{
+		FMODCALL(it->second->sound->release(), "Sound Release", NULL);
+		FMODCALL(it->second->channel->channel->stop(),"Channel Release", NULL);
+	}
+
 	FMODCALL(system->close(), "System Close", NULL);
 	FMODCALL(system->release(), "System Release", NULL);
 }

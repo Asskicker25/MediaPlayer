@@ -24,5 +24,8 @@ struct Sound
 	FMOD::Sound* sound = nullptr;
 	Channel* channel = nullptr;
 
+	Sound();
+	~Sound();
 	void Reset();
+
 };

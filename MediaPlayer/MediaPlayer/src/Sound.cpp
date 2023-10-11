@@ -1,4 +1,15 @@
 #include "Sound.h"
+#include <iostream>
+
+Sound::Sound()
+{
+}
+
+Sound::~Sound()
+{
+	sound->release();
+	channel->channel->stop();
+}
 
 void Sound::Reset()
 {
