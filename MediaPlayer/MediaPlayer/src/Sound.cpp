@@ -2,11 +2,11 @@
 
 void Sound::Reset()
 {
-	path = "";
-	soundID = "";
+	/*path = "";
+	soundID = "None";
 	isStreaming = false;
 	isLooping = false;
-	channel = nullptr;
+	channel = nullptr;*/
 
 	pitch = 1.0f;
 	volume = 0.75f;

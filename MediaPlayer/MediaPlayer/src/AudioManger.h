@@ -17,7 +17,7 @@ private:
 	FMOD::SoundGroup* currentSoundGroup;
 
 	std::vector<Channel*> channels;
-	std::unordered_map<std::string, FMOD::Sound*> loadedSounds;
+	std::unordered_map<std::string, Sound*> loadedSounds;
 	std::vector<FMOD::SoundGroup*> soundGroups;
 
 	Channel* GetUnusedChannel();
@@ -28,16 +28,18 @@ public:
 
 	void Initialize();
 	void CreateSoundGroup(std::string name, bool setAsCurrent = false);
-	void LoadSound(Sound& sound);
-	void PlaySound(Sound& sound);
+	bool LoadSound(Sound* sound);
+	void PlaySound(Sound* sound);
 	void UpdateChannelState();
 
 	void PlayAudio(FMOD::Channel* channel);
 	void PauseAudio(FMOD::Channel* channel);
-	void StopAudio(FMOD::Channel* channel);
+	void StopAudio(Sound* sound);
 	void AdjustPitch(FMOD::Channel* channel, float pitchValue);
 	void AdjustVolume(FMOD::Channel* channel, float volumeValue);
 	void AdjustPan(FMOD::Channel* channel, float panValue);
+	float GetCurrentTime(FMOD::Channel* channel);
+	float GetLengthOfSound(Sound* sound);
 
 	void Update();
 	void Destroy();

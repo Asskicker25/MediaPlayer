@@ -2,10 +2,12 @@
 
 #include <string>
 #include "Channel.h"
+#include <fmod.hpp>
+
 
 struct Sound
 {
-	const char* path;
+	std::string path;
 	std::string soundID;
 	bool isStreaming = false;
 	bool isLooping = false;
@@ -17,6 +19,9 @@ struct Sound
 	//Left to right distribution of sound
 	float pan = 0.0f;
 
+	float length = 0;
+
+	FMOD::Sound* sound = nullptr;
 	Channel* channel = nullptr;
 
 	void Reset();

@@ -9,14 +9,14 @@ class MediaPlayer
 private:
 
 	AudioManger& audioManager;
-	Sound sound;
+	Sound* sound;
 	bool isPaused = false;
 
 public:
 	MediaPlayer(AudioManger& audioManager);
 	~MediaPlayer();
 
-	void SetSound(Sound sound);
+	void SetSound(Sound* sound);
 	void PlayAudio();
 	void PauseAudio();
 	void TogglePauseAudio();
@@ -25,7 +25,12 @@ public:
 	void AdjustVolume(float volumeValue);
 	void AdjustPan(float panValue);
 
+	float GetLength();
+	float GetCurrentTime();
+
 	bool IsPaused();
+
+	Sound* GetCurrentSound();
 
 
 };
