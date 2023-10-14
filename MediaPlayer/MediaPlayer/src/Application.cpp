@@ -22,6 +22,9 @@ MediaPlayer mediaPlayer(audioManager);
 int screenWidth{ 800 };
 int screenHeight{ 600 };
 
+bool isStreamingCheckBox = false;
+bool isLoopCheckBox = false;
+
 static char songName[128] = "La Vi En Rose";
 
 std::map<std::string, Sound*> sounds;
@@ -182,6 +185,9 @@ void DrawImguiWindow(bool window, ImVec4 clearColor, ImGuiIO io, int windowWidth
 
 		if (it != sounds.end())
 		{
+			sounds[songName]->isLooping = isLoopCheckBox;
+			sounds[songName]->isStreaming = isStreamingCheckBox;
+
 			if (audioManager.LoadSound(sounds[songName]))
 			{
 				audioManager.PlaySound(sounds[songName]);
@@ -198,6 +204,10 @@ void DrawImguiWindow(bool window, ImVec4 clearColor, ImGuiIO io, int windowWidth
 			soundNotFound = true;
 		}
 	}
+
+	ImGui::Checkbox("Streaming", &isStreamingCheckBox);
+	ImGui::SameLine();
+	ImGui::Checkbox("Loop", &isLoopCheckBox);
 
 	if (soundNotFound)
 	{
@@ -256,7 +266,7 @@ void DrawImguiWindow(bool window, ImVec4 clearColor, ImGuiIO io, int windowWidth
 	}
 
 
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+	//ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 	ImGui::End();
 }
 

@@ -8,4 +8,14 @@ struct Channel
 	bool isInUse = false;
 	std::string soundID;
 	FMOD::Channel* channel;
+
+	Channel()
+	{
+		channel = nullptr;
+	}
+
+	~Channel()
+	{
+		delete channel;
+	}
 };

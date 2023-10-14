@@ -147,7 +147,6 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\MediaPlayer.cpp" />
     <ClCompile Include="src\AudioManger.cpp" />
-    <ClCompile Include="src\maincpp.cpp" />
     <ClCompile Include="src\Sound.cpp" />
   </ItemGroup>
   <ItemGroup>

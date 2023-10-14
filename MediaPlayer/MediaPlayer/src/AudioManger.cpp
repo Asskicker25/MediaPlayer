@@ -27,18 +27,17 @@ AudioManger::AudioManger() : system{ nullptr }, currentSoundGroup{ nullptr }
 
 AudioManger::~AudioManger()
 {
-	for (int i = 0; i < soundGroups.size(); i++)
-	{
-		FMODCALL(soundGroups[i]->release(), "SoundGroupRelease " + i, NULL);
-	}
-
 	std::unordered_map<std::string, Sound*>::iterator it;
 
 	for (it = loadedSounds.begin(); it != loadedSounds.end(); ++it)
 	{
 		FMODCALL(it->second->sound->release(), "Sound Release", NULL);
-		FMODCALL(it->second->channel->channel->stop(),"Channel Release", NULL);
+		FMODCALL(it->second->channel->channel->stop(), "Channel Release", NULL);
 	}
+
+	soundGroups.clear();
+	loadedSounds.clear();
+	channels.clear();
 
 	FMODCALL(system->close(), "System Close", NULL);
 	FMODCALL(system->release(), "System Release", NULL);
@@ -110,18 +109,18 @@ void AudioManger::PauseAudio(FMOD::Channel* channel)
 void AudioManger::StopAudio(Sound* sound)
 {
 	[&]()
-	{
-		FMODCALL(sound->channel->channel->stop(), "Stop Audio", [&]()
 		{
-				FMODCALL(system->close(),"System Close", NULL);
-				FMODCALL(system->release(),"System Release", NULL);
-		});
+			FMODCALL(sound->channel->channel->stop(), "Stop Audio", [&]()
+				{
+					FMODCALL(system->close(), "System Close", NULL);
+					FMODCALL(system->release(), "System Release", NULL);
+				});
 
-		FMODCALL(loadedSounds[sound->soundID]->sound->release(),"Sound Release", NULL);
+			FMODCALL(loadedSounds[sound->soundID]->sound->release(), "Sound Release", NULL);
 
-		loadedSounds.erase(sound->soundID);
-	}();
-	
+			loadedSounds.erase(sound->soundID);
+		}();
+
 
 }
 
@@ -257,7 +256,7 @@ bool AudioManger::LoadSound(Sound* sound)
 
 		unsigned int length;
 
-		FMODCALL(soundPtr->getLength(&length, FMOD_TIMEUNIT_MS),"Get Sound Length", NULL);
+		FMODCALL(soundPtr->getLength(&length, FMOD_TIMEUNIT_MS), "Get Sound Length", NULL);
 
 		loadedSounds[sound->soundID]->length = length;
 		loadedSounds[sound->soundID]->sound = soundPtr;
